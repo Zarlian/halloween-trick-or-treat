@@ -4,6 +4,7 @@
     "description": "Simple locations app with admin panel and map",
     "main": "server.js",
     "scripts": {
+        "build": "echo 'No build step required for Express and EJS'",
         "start": "node server.js",
         "dev": "nodemon server.js",
         "postinstall": "prisma generate"
