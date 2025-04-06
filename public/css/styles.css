@@ -1,0 +1,61 @@
+/* Custom styles */
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    flex: 1;
+}
+
+/* Admin panel styles */
+.table-responsive {
+    overflow-x: auto;
+}
+
+.btn-group {
+    display: flex;
+    gap: 5px;
+}
+
+/* Map styles */
+#map {
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.leaflet-popup-content {
+    max-width: 250px;
+}
+
+.location-popup img {
+    max-width: 100%;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.location-popup h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+.location-popup p {
+    margin-bottom: 5px;
+}
+
+.location-address {
+    font-style: italic;
+    color: #666;
+}
+
+/* Form styles */
+.form-label {
+    font-weight: 500;
+}
+
+.form-text {
+    font-size: 0.85rem;
+    color: #6c757d;
+}

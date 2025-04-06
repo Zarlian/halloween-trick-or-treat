@@ -1,0 +1,15 @@
+<%- contentFor('body') %>
+
+<div class="row">
+  <div class="col-12">
+    <h1>Locations Map</h1>
+    <div id="map" style="height: 600px; width: 100%;"></div>
+  </div>
+</div>
+
+<%- contentFor('extraScripts') %>
+<script>
+  // Pass locations data to the client-side script
+  const locations = <%- locations %>;
+</script>
+<script src="/js/map.js"></script>

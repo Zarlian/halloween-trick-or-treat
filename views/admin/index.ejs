@@ -1,0 +1,55 @@
+<%- contentFor('body') %>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1>Location Management</h1>
+  <a href="/admin/locations/create" class="btn btn-success">Add New Location</a>
+</div>
+
+<div class="table-responsive">
+  <table class="table table-striped table-hover">
+    <thead class="table-dark">
+      <tr>
+        <th>#</th>
+        <th>Order</th>
+        <th>Title</th>
+        <th>Street</th>
+        <th>Number</th>
+        <th>Coordinates</th>
+        <th>Description</th>
+        <th>Image</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="locations-table-body">
+      <% locations.forEach((location, index) => { %>
+      <tr data-id="<%= location.id %>">
+        <td><%= location.id %></td>
+        <td><%= location.orderIndex || '-' %></td>
+        <td><%= location.title || '-' %></td>
+        <td><%= location.street %></td>
+        <td><%= location.number %></td>
+        <td><%= location.lat.toFixed(4) %>, <%= location.lon.toFixed(4) %></td>
+        <td><%= location.description ? (location.description.length > 30 ? location.description.substring(0, 30) + '...' : location.description) : '-' %></td>
+        <td>
+          <% if (location.image) { %>
+            <img src="/uploads/<%= location.image %>" alt="Location image" style="max-width: 50px; max-height: 50px;">
+          <% } else { %>
+            No image
+          <% } %>
+        </td>
+        <td>
+          <div class="btn-group btn-group-sm">
+            <a href="/admin/locations/<%= location.id %>/edit" class="btn btn-primary">Edit</a>
+            <form action="/admin/locations/<%= location.id %>?_method=DELETE" method="POST" onsubmit="return confirm('Are you sure you want to delete this location?');">
+              <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+          </div>
+        </td>
+      </tr>
+      <% }); %>
+    </tbody>
+  </table>
+</div>
+
+<%- contentFor('extraScripts') %>
+<script src="/js/admin.js"></script>

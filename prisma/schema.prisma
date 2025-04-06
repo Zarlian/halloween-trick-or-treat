@@ -1,0 +1,26 @@
+// This is your Prisma schema file
+// Learn more about it here: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Location {
+  id          Int       @id @default(autoincrement())
+  street      String
+  number      String
+  lon         Float
+  lat         Float
+  title       String?
+  description String?
+  image       String?
+  updatedAt   DateTime? @map("updated_at")
+  orderIndex  Int?      @map("order_index")
+
+  @@map("locations")
+}
