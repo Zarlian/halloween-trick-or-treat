@@ -73,7 +73,7 @@ function startLocationTracking() {
             function (position) {
                 const lat = position.coords.latitude;
                 const lng = position.coords.longitude;
-                const accuracy = (position.coords.accuracy / 4);
+                const accuracy = position.coords.accuracy;
                 console.log('User location:', lat, lng, 'Accuracy:', accuracy);
 
                 // Update user's marker or create a new one
@@ -82,8 +82,8 @@ function startLocationTracking() {
                     userMarker = L.marker([lat, lng], {
                         icon: L.divIcon({
                             className: 'user-location-marker',
-                            html: '<div class="user-dot">🎃</div>',
-                            iconSize: [32, 32],
+                            html: '<div class="marker-content">🎃</div>',
+                            iconSize: [45, 45],
                             iconAnchor: [16, 16]
                         })
                     }).addTo(map);
