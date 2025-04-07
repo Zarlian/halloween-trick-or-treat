@@ -65,7 +65,7 @@ if (markers.length > 0) {
 
 // Add GPS functionality
 let userMarker = null;
-let followingLocation = true;
+let followingLocation = false;
 
 function startLocationTracking() {
     if (navigator.geolocation) {
@@ -127,6 +127,10 @@ function startLocationTracking() {
     }
 }
 
+map.on('dragstart', function () {
+    followingLocation = false;
+});
+
 // Create a toast notification function
 function createToast(message, type = 'info') {
     const toast = document.createElement('div');
@@ -145,6 +149,55 @@ function createToast(message, type = 'info') {
         }, 300);
     }, 5000);
 }
+
+const followButton = L.control({ position: 'bottomright' });
+followButton.onAdd = function (map) {
+    const div = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
+    div.innerHTML = '<a href="#" id="follow-toggle" title="Toggle auto-follow" role="button" aria-label="Toggle auto-follow" class="leaflet-control-follow active"><i class="fas fa-crosshairs"></i></a>';
+
+    div.onclick = function () {
+        followingLocation = !followingLocation;
+        const btn = document.getElementById('follow-toggle');
+
+        if (followingLocation) {
+            btn.classList.add('active');
+            if (userMarker) {
+                map.panTo(userMarker.getLatLng());
+            }
+        } else {
+            btn.classList.remove('active');
+        }
+
+        return false;
+    };
+
+    return div;
+};
+
+followButton.addTo(map);
+
+
+// Create a custom control with center on location button
+const locateControl = L.control({ position: 'bottomright' });
+
+locateControl.onAdd = function (map) {
+    const div = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
+    div.innerHTML = '<a href="#" title="Center on my location" role="button" aria-label="Center on my location" class="leaflet-control-locate"><i class="fas fa-location-arrow"></i></a>';
+
+    div.onclick = function () {
+        followingLocation = true;
+        if (userMarker) {
+            map.setView(userMarker.getLatLng(), 16);
+        } else {
+            startLocationTracking();
+        }
+        return false;
+    };
+
+    return div;
+};
+
+locateControl.addTo(map);
 
 // Start location tracking when the page loads
 startLocationTracking();
