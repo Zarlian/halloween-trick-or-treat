@@ -97,8 +97,6 @@ function startLocationTracking() {
                         fillOpacity: 0.15
                     }).addTo(map);
 
-                    // Center the map on the user's location
-                    map.setView([lat, lng], 17);
                 } else {
                     userMarker.setLatLng([lat, lng]);
 
