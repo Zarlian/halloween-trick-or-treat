@@ -63,6 +63,94 @@ if (markers.length > 0) {
     // }
 }
 
+// Add GPS functionality
+let userMarker = null;
+let followingLocation = true;
+
+function startLocationTracking() {
+    if (navigator.geolocation) {
+        navigator.geolocation.watchPosition(
+            function (position) {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+                const accuracy = (position.coords.accuracy / 4);
+                console.log('User location:', lat, lng, 'Accuracy:', accuracy);
+
+                // Update user's marker or create a new one
+                if (userMarker === null) {
+                    // Create a pumpkin icon for the user's location marker
+                    userMarker = L.marker([lat, lng], {
+                        icon: L.divIcon({
+                            className: 'user-location-marker',
+                            html: '<div class="user-dot">🎃</div>',
+                            iconSize: [32, 32],
+                            iconAnchor: [16, 16]
+                        })
+                    }).addTo(map);
+
+                    // Add accuracy circle
+                    L.circle([lat, lng], {
+                        radius: accuracy,
+                        weight: 1,
+                        color: '#ff6c00',
+                        fillColor: '#ff6c00',
+                        fillOpacity: 0.15
+                    }).addTo(map);
+
+                    // Center the map on the user's location
+                    map.setView([lat, lng], 17);
+                } else {
+                    userMarker.setLatLng([lat, lng]);
+
+                    if (followingLocation) {
+                        map.panTo([lat, lng]);
+                    }
+                }
+            },
+            function (error) {
+                const errorMessages = {
+                    1: "Location access denied. Please enable location services for this site.",
+                    2: "Location information unavailable.",
+                    3: "Location request timed out.",
+                    0: "An unknown error occurred."
+                };
+
+                // Create a toast notification instead of an alert
+                createToast(errorMessages[error.code] || errorMessages[0], 'error');
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 30000,
+                maximumAge: 5000
+            }
+        );
+    } else {
+        createToast("Geolocation is not supported by this browser.", 'error');
+    }
+}
+
+// Create a toast notification function
+function createToast(message, type = 'info') {
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+    toast.innerHTML = message;
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+        toast.classList.add('show');
+    }, 100);
+
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => {
+            document.body.removeChild(toast);
+        }, 300);
+    }, 5000);
+}
+
+// Start location tracking when the page loads
+startLocationTracking();
+
 // Add some CSS to style the Halloween markers and popups
 const style = document.createElement('style');
 style.textContent = `
