@@ -18,7 +18,6 @@ const halloweenIcon = L.divIcon({
 // Array to store markers
 const markers = [];
 
-console.log('Locations:', locations);
 // Add markers for each location
 locations.forEach(location => {
     // Use the Halloween icon for markers
@@ -54,33 +53,14 @@ if (markers.length > 0) {
     const bounds = L.featureGroup(markers).getBounds();
     map.fitBounds(bounds, { padding: [50, 50] });
 
-    // Create a polyline to show the route between locations
-    if (markers.length > 1) {
-        // Sort locations by orderIndex if available
-        const sortedLocations = [...locations].sort((a, b) => {
-            // If both have orderIndex, sort by it
-            if (a.orderIndex !== null && b.orderIndex !== null) {
-                return a.orderIndex - b.orderIndex;
-            }
-            // If only one has orderIndex, prioritize it
-            if (a.orderIndex !== null) return -1;
-            if (b.orderIndex !== null) return 1;
-            // If neither has orderIndex, maintain original order
-            return 0;
-        });
-
-        // Create an array of coordinates for the polyline
-        const routeCoordinates = sortedLocations.map(loc => [loc.lat, loc.lon]);
-
-        // Create a Halloween-themed polyline and add it to the map
-        const route = L.polyline(routeCoordinates, {
+    console.log('Route coordinates:', route); // Debugging line
+        L.polyline(route, {
             color: '#FF6700', // Halloween orange
             weight: 4,
-            opacity: 0.7,
+            opacity: 0.9,
             smoothFactor: 1,
-            dashArray: '10, 10' // Create a dotted line for spooky effect
         }).addTo(map);
-    }
+    // }
 }
 
 // Add some CSS to style the Halloween markers and popups
