@@ -1,55 +1,73 @@
 <%- contentFor('body') %>
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-  <h1>Location Management</h1>
-  <a href="/admin/locations/create" class="btn btn-success">Add New Location</a>
-</div>
+  <div class="flex justify-between items-center mb-4">
+    <h1 class="text-2xl font-semibold">Location Management</h1>
+    <a href="/admin/locations/create" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600">Add New
+      Location</a>
+  </div>
 
-<div class="table-responsive">
-  <table class="table table-striped table-hover">
-    <thead class="table-dark">
-      <tr>
-        <th>#</th>
-        <th>Order</th>
-        <th>Title</th>
-        <th>Street</th>
-        <th>Number</th>
-        <th>Coordinates</th>
-        <th>Description</th>
-        <th>Image</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody id="locations-table-body">
-      <% locations.forEach((location, index) => { %>
-      <tr data-id="<%= location.id %>">
-        <td><%= location.id %></td>
-        <td><%= location.orderIndex || '-' %></td>
-        <td><%= location.title || '-' %></td>
-        <td><%= location.street %></td>
-        <td><%= location.number %></td>
-        <td><%= location.lat.toFixed(4) %>, <%= location.lon.toFixed(4) %></td>
-        <td><%= location.description ? (location.description.length > 30 ? location.description.substring(0, 30) + '...' : location.description) : '-' %></td>
-        <td>
-          <% if (location.image) { %>
-            <img src="/uploads/<%= location.image %>" alt="Location image" style="max-width: 50px; max-height: 50px;">
-          <% } else { %>
-            No image
-          <% } %>
-        </td>
-        <td>
-          <div class="btn-group btn-group-sm">
-            <a href="/admin/locations/<%= location.id %>/edit" class="btn btn-primary">Edit</a>
-            <form action="/admin/locations/<%= location.id %>?_method=DELETE" method="POST" onsubmit="return confirm('Are you sure you want to delete this location?');">
-              <button type="submit" class="btn btn-danger">Delete</button>
-            </form>
-          </div>
-        </td>
-      </tr>
-      <% }); %>
-    </tbody>
-  </table>
-</div>
+  <div class="overflow-x-auto">
+    <table class="min-w-full table-auto">
+      <thead class="bg-gray-800 text-white">
+        <tr>
+          <th class="px-4 py-2">#</th>
+          <th class="px-4 py-2">Order</th>
+          <th class="px-4 py-2">Title</th>
+          <th class="px-4 py-2">Street</th>
+          <th class="px-4 py-2">Number</th>
+          <th class="px-4 py-2">Coordinates</th>
+          <th class="px-4 py-2">Description</th>
+          <th class="px-4 py-2">Image</th>
+          <th class="px-4 py-2">Actions</th>
+        </tr>
+      </thead>
+      <tbody id="locations-table-body" class="bg-gray-100 text-gray-700">
+        <% locations.forEach((location, index)=> { %>
+          <tr class="border-b hover:bg-gray-200" data-id="<%= location.id %>">
+            <td class="px-4 py-2">
+              <%= location.id %>
+            </td>
+            <td class="px-4 py-2">
+              <%= location.orderIndex || '-' %>
+            </td>
+            <td class="px-4 py-2">
+              <%= location.title || '-' %>
+            </td>
+            <td class="px-4 py-2">
+              <%= location.street %>
+            </td>
+            <td class="px-4 py-2">
+              <%= location.number %>
+            </td>
+            <td class="px-4 py-2">
+              <%= location.lat.toFixed(4) %>, <%= location.lon.toFixed(4) %>
+            </td>
+            <td class="px-4 py-2">
+              <%= location.description ? (location.description.length> 30 ? location.description.substring(0, 30) +
+                '...' : location.description) : '-' %>
+            </td>
+            <td class="px-4 py-2">
+              <% if (location.image) { %>
+                <img src="/uploads/<%= location.image %>" alt="Location image" class="w-12 h-12 object-cover">
+                <% } else { %>
+                  No image
+                  <% } %>
+            </td>
+            <td class="px-4 py-2">
+              <div class="flex space-x-2">
+                <a href="/admin/locations/<%= location.id %>/edit"
+                  class="bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600">Edit</a>
+                <form action="/admin/locations/<%= location.id %>?_method=DELETE" method="POST"
+                  onsubmit="return confirm('Are you sure you want to delete this location?');">
+                  <button type="submit" class="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600">Delete</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          <% }); %>
+      </tbody>
+    </table>
+  </div>
 
-<%- contentFor('extraScripts') %>
-<script src="/js/admin.js"></script>
+  <%- contentFor('extraScripts') %>
+    <script src="/js/admin.js"></script>
