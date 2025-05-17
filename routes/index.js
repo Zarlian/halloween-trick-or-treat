@@ -4,7 +4,6 @@ const router = express.Router();
 const prisma = new PrismaClient();
 const { getWalkingRoute } = require('../public/js/utils/routeService'); // Adjust the path as necessary
 
-
 // Home page with map
 router.get('/', async (req, res) => {
     try {
@@ -14,11 +13,16 @@ router.get('/', async (req, res) => {
             }
         });
 
-        const coordinates = locations.map(loc => [loc.lon, loc.lat]);
-        const route = await getWalkingRoute(coordinates);
+        let coordinates = [];
+        let route = null;
 
-        res.render('index', { 
-            locations: JSON.stringify(locations) ,
+        if (locations.length > 0) {
+            coordinates = locations.map(loc => [loc.lon, loc.lat]);
+            route = await getWalkingRoute(coordinates);
+        }
+
+        res.render('index', {
+            locations: JSON.stringify(locations),
             route: JSON.stringify(route)
         });
     } catch (error) {
