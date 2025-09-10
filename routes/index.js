@@ -14,6 +14,7 @@ router.get('/', async (req, res) => {
 
         let coordinates = [];
         let route = null;
+        const visibleLocations = locations.filter(l => !l.isHidden);
 
         if (locations.length > 0) {
             coordinates = locations.map(loc => [loc.lon, loc.lat]);
@@ -21,7 +22,7 @@ router.get('/', async (req, res) => {
         }
 
         res.render('index', {
-            locations: JSON.stringify(locations),
+            locations: JSON.stringify(visibleLocations),
             route: JSON.stringify(route)
         });
     } catch (error) {

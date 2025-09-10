@@ -29,7 +29,7 @@ router.get('/locations/create', (req, res) => {
 // Create location
 router.post('/locations', async (req, res) => {
     try {
-        const { street, number, lon, lat, title, description, orderIndex } = req.body;
+        const { street, number, lon, lat, title, description, orderIndex, isHidden } = req.body;
 
         let image = null;
 
@@ -52,6 +52,7 @@ router.post('/locations', async (req, res) => {
                 description: description || null,
                 image: image,
                 orderIndex: orderIndex ? parseInt(orderIndex) : null,
+                isHidden: Boolean(isHidden),
                 updatedAt: new Date()
             }
         });
@@ -86,7 +87,7 @@ router.get('/locations/:id/edit', async (req, res) => {
 // Update location
 router.put('/locations/:id', async (req, res) => {
     try {
-        const { street, number, lon, lat, title, description, orderIndex } = req.body;
+        const { street, number, lon, lat, title, description, orderIndex, isHidden } = req.body;
 
         const locationData = {
             street,
@@ -96,6 +97,7 @@ router.put('/locations/:id', async (req, res) => {
             title: title || null,
             description: description || null,
             orderIndex: orderIndex ? parseInt(orderIndex) : null,
+            isHidden: Boolean(isHidden),
             updatedAt: new Date()
         };
 

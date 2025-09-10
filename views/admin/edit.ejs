@@ -63,6 +63,13 @@
         </div>
 
         <div class="mb-4">
+          <label class="inline-flex items-center text-white">
+            <input type="checkbox" class="mr-2" id="isHidden" name="isHidden" value="true" <%= location.isHidden ? 'checked' : '' %>>
+            Hidden waypoint (used for routing, not shown on map)
+          </label>
+        </div>
+
+        <div class="mb-4">
           <div id="map" style="height: 200px; width: 100%;"></div>
           <p class="text-sm text-gray-500">Click on the map to update coordinates</p>
         </div>
