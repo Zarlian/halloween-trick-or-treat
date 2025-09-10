@@ -27,7 +27,7 @@ function decodePolyline(encoded) {
         coordinates.push([lat / 1e5, lng / 1e5]);
     }
 
-    return coordinates.map(([lat, lng]) => [lng, lat]); // Flip for Leaflet
+    return coordinates.map(([lat, lng]) => [lng, lat]); 
 }
 
 async function getWalkingRoute(coordinates) {
@@ -45,7 +45,6 @@ async function getWalkingRoute(coordinates) {
 
         const encoded = response.data.routes[0].geometry;
         const decoded =  decodePolyline(encoded);
-        // Convert to Leaflet format (longitude, latitude)
         return decoded.map(([lng, lat]) => [lat, lng]);
     } catch (error) {
         console.error('Error fetching walking route:', error.response?.data || error.message);

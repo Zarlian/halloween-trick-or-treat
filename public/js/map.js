@@ -177,7 +177,6 @@ followButton.onAdd = function (map) {
 followButton.addTo(map);
 
 
-// Create a custom control with center on location button
 const locateControl = L.control({ position: 'bottomright' });
 
 locateControl.onAdd = function (map) {

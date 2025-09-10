@@ -2,9 +2,8 @@ const express = require('express');
 const { PrismaClient } = require('@prisma/client');
 const router = express.Router();
 const prisma = new PrismaClient();
-const { getWalkingRoute } = require('../public/js/utils/routeService'); // Adjust the path as necessary
+const { getWalkingRoute } = require('../public/js/utils/routeService'); 
 
-// Home page with map
 router.get('/', async (req, res) => {
     try {
         const locations = await prisma.location.findMany({
