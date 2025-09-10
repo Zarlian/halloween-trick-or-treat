@@ -8,6 +8,7 @@ const expressLayouts = require('express-ejs-layouts');
 const indexRoutes = require('./routes/index');
 const adminRoutes = require('./routes/admin');
 const apiRoutes = require('./routes/api');
+const storyRoutes = require('./routes/stories');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -32,6 +33,7 @@ app.use(fileUpload({
 app.use('/', indexRoutes);
 app.use('/admin', adminRoutes);
 app.use('/api', apiRoutes);
+app.use('/stories', storyRoutes);
 
 // Error handler
 app.use((err, req, res, next) => {

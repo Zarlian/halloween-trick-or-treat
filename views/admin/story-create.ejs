@@ -1,0 +1,45 @@
+<%- contentFor('body') %>
+
+  <h1 class="text-2xl font-semibold mb-4">Add Story Part</h1>
+
+  <form action="/admin/stories" method="POST">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+      <div>
+        <div class="mb-4">
+          <label for="title" class="block text-sm font-medium text-white">Title*</label>
+          <input type="text" class="mt-1 p-2 border border-gray-300 text-gray-700 rounded w-full" id="title" name="title" required>
+        </div>
+
+        <div class="mb-4">
+          <label for="orderIndex" class="block text-sm font-medium text-white">Order</label>
+          <input type="number" class="mt-1 p-2 border border-gray-300 text-gray-700 rounded w-full" id="orderIndex" name="orderIndex">
+        </div>
+
+        <div class="mb-4">
+          <label for="qrKey" class="block text-sm font-medium text-white">QR Key*</label>
+          <input type="text" class="mt-1 p-2 border border-gray-300 text-gray-700 rounded w-full" id="qrKey" name="qrKey" required>
+          <p class="text-sm text-gray-300 mt-1">QR URL: <code>/stories/unlock?code=YOUR_KEY</code></p>
+        </div>
+
+        <div class="mb-4">
+          <label class="inline-flex items-center text-white">
+            <input type="checkbox" class="mr-2" id="isActive" name="isActive" value="true" checked>
+            Active
+          </label>
+        </div>
+      </div>
+
+      <div>
+        <div class="mb-4">
+          <label for="content" class="block text-sm font-medium text-white">Content (HTML allowed)</label>
+          <textarea class="mt-1 p-2 border border-gray-300 rounded text-gray-700 w-full" id="content" name="content" rows="12"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex justify-between">
+      <a href="/admin" class="bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600">Cancel</a>
+      <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Save Story Part</button>
+    </div>
+  </form>
+

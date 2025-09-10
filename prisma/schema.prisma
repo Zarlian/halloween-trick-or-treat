@@ -25,3 +25,14 @@ model Location {
 
   @@map("locations")
 }
+
+model StoryPart {
+  id         Int     @id @default(autoincrement())
+  title      String
+  content    String
+  orderIndex Int?    @map("order_index")
+  qrKey      String  @unique @map("qr_key")
+  isActive   Boolean @default(true) @map("is_active")
+
+  @@map("story_parts")
+}

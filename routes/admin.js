@@ -8,15 +8,91 @@ const prisma = new PrismaClient();
 // Admin dashboard
 router.get('/', async (req, res) => {
     try {
-        const locations = await prisma.location.findMany({
-            orderBy: {
-                orderIndex: 'asc'
-            }
-        });
+        const [locations, storyParts] = await Promise.all([
+            prisma.location.findMany({
+                orderBy: {
+                    orderIndex: 'asc'
+                }
+            }),
+            prisma.storyPart.findMany({
+                orderBy: {
+                    orderIndex: 'asc'
+                }
+            })
+        ]);
 
-        res.render('admin/index', { locations });
+        res.render('admin/index', { locations, storyParts });
     } catch (error) {
         console.error('Error fetching locations:', error);
+        res.status(500).send('Server error');
+    }
+});
+
+// Story parts - create form
+router.get('/stories/create', (req, res) => {
+    res.render('admin/story-create');
+});
+
+// Story parts - create
+router.post('/stories', async (req, res) => {
+    try {
+        const { title, content, orderIndex, qrKey, isActive } = req.body;
+        await prisma.storyPart.create({
+            data: {
+                title,
+                content,
+                orderIndex: orderIndex ? parseInt(orderIndex) : null,
+                qrKey,
+                isActive: Boolean(isActive)
+            }
+        });
+        res.redirect('/admin');
+    } catch (error) {
+        console.error('Error creating story part:', error);
+        res.status(500).send('Server error');
+    }
+});
+
+// Story parts - edit form
+router.get('/stories/:id/edit', async (req, res) => {
+    try {
+        const part = await prisma.storyPart.findUnique({ where: { id: parseInt(req.params.id) } });
+        if (!part) return res.status(404).send('Story part not found');
+        res.render('admin/story-edit', { part });
+    } catch (error) {
+        console.error('Error fetching story part:', error);
+        res.status(500).send('Server error');
+    }
+});
+
+// Story parts - update
+router.put('/stories/:id', async (req, res) => {
+    try {
+        const { title, content, orderIndex, qrKey, isActive } = req.body;
+        await prisma.storyPart.update({
+            where: { id: parseInt(req.params.id) },
+            data: {
+                title,
+                content,
+                orderIndex: orderIndex ? parseInt(orderIndex) : null,
+                qrKey,
+                isActive: Boolean(isActive)
+            }
+        });
+        res.redirect('/admin');
+    } catch (error) {
+        console.error('Error updating story part:', error);
+        res.status(500).send('Server error');
+    }
+});
+
+// Story parts - delete
+router.delete('/stories/:id', async (req, res) => {
+    try {
+        await prisma.storyPart.delete({ where: { id: parseInt(req.params.id) } });
+        res.redirect('/admin');
+    } catch (error) {
+        console.error('Error deleting story part:', error);
         res.status(500).send('Server error');
     }
 });
