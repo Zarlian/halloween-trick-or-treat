@@ -33,6 +33,8 @@ model StoryPart {
   orderIndex Int?    @map("order_index")
   qrKey      String  @unique @map("qr_key")
   isActive   Boolean @default(true) @map("is_active")
+  lat        Float?
+  lon        Float?
 
   @@map("story_parts")
 }

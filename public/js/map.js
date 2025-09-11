@@ -48,6 +48,30 @@ locations.forEach(location => {
     markers.push(marker);
 });
 
+// Add markers for story pins (no routing)
+if (typeof storyPins !== 'undefined' && Array.isArray(storyPins)) {
+    const storyIcon = L.divIcon({
+        className: 'halloween-marker story-marker',
+        html: '<div class="marker-content">📜</div>',
+        iconSize: [28, 28],
+        iconAnchor: [14, 28],
+        popupAnchor: [0, -28]
+    });
+
+    storyPins.forEach(pin => {
+        if (pin.lat != null && pin.lon != null) {
+            const marker = L.marker([pin.lat, pin.lon], { icon: storyIcon }).addTo(map);
+            const popupContent = `
+            <div class="location-popup">
+              <h3 class="text-halloween-orange font-['Creepster']">${pin.title || 'Story'}</h3>
+              <p class="text-white"><a href="/stories/part/${pin.id}">Open story</a></p>
+            </div>`;
+            marker.bindPopup(popupContent);
+            markers.push(marker);
+        }
+    });
+}
+
 // If we have markers, fit the map to show all of them
 if (markers.length > 0) {
     const bounds = L.featureGroup(markers).getBounds();
@@ -218,6 +242,9 @@ style.textContent = `
     }
     .leaflet-popup-tip {
         background-color: #FF6700;
+    }
+    .story-marker .marker-content {
+        font-size: 22px;
     }
     .image-container {
         margin-top: 8px;

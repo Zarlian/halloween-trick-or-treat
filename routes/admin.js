@@ -36,14 +36,16 @@ router.get('/stories/create', (req, res) => {
 // Story parts - create
 router.post('/stories', async (req, res) => {
     try {
-        const { title, content, orderIndex, qrKey, isActive } = req.body;
+        const { title, content, orderIndex, qrKey, isActive, lat, lon } = req.body;
         await prisma.storyPart.create({
             data: {
                 title,
                 content,
                 orderIndex: orderIndex ? parseInt(orderIndex) : null,
                 qrKey,
-                isActive: Boolean(isActive)
+                isActive: Boolean(isActive),
+                lat: lat ? parseFloat(lat) : null,
+                lon: lon ? parseFloat(lon) : null
             }
         });
         res.redirect('/admin');
@@ -68,7 +70,7 @@ router.get('/stories/:id/edit', async (req, res) => {
 // Story parts - update
 router.put('/stories/:id', async (req, res) => {
     try {
-        const { title, content, orderIndex, qrKey, isActive } = req.body;
+        const { title, content, orderIndex, qrKey, isActive, lat, lon } = req.body;
         await prisma.storyPart.update({
             where: { id: parseInt(req.params.id) },
             data: {
@@ -76,7 +78,9 @@ router.put('/stories/:id', async (req, res) => {
                 content,
                 orderIndex: orderIndex ? parseInt(orderIndex) : null,
                 qrKey,
-                isActive: Boolean(isActive)
+                isActive: Boolean(isActive),
+                lat: lat ? parseFloat(lat) : null,
+                lon: lon ? parseFloat(lon) : null
             }
         });
         res.redirect('/admin');

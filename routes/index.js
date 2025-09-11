@@ -6,11 +6,17 @@ const { getWalkingRoute } = require('../public/js/utils/routeService');
 
 router.get('/', async (req, res) => {
     try {
-        const locations = await prisma.location.findMany({
-            orderBy: {
-                orderIndex: 'asc'
-            }
-        });
+        const [locations, storyParts] = await Promise.all([
+            prisma.location.findMany({
+                orderBy: {
+                    orderIndex: 'asc'
+                }
+            }),
+            prisma.storyPart.findMany({
+                where: { isActive: true, lat: { not: null }, lon: { not: null } },
+                orderBy: { orderIndex: 'asc' }
+            })
+        ]);
 
         let coordinates = [];
         let route = null;
@@ -21,9 +27,12 @@ router.get('/', async (req, res) => {
             route = await getWalkingRoute(coordinates);
         }
 
+        const storyPins = storyParts.map(p => ({ id: p.id, title: p.title, lat: p.lat, lon: p.lon }));
+
         res.render('index', {
             locations: JSON.stringify(visibleLocations),
-            route: JSON.stringify(route)
+            route: JSON.stringify(route),
+            storyPins: JSON.stringify(storyPins)
         });
     } catch (error) {
         console.error('Error fetching locations:', error);
