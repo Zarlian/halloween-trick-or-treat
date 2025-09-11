@@ -37,10 +37,12 @@ router.get('/stories/create', (req, res) => {
 router.post('/stories', async (req, res) => {
     try {
         const { title, content, titleNl, contentNl, titleFr, contentFr, titleEn, contentEn, orderIndex, qrKey, isActive, lat, lon } = req.body;
+        const baseTitle = (title && title.trim()) || titleNl || titleFr || titleEn || 'Untitled';
+        const baseContent = (content && content.trim()) || contentNl || contentFr || contentEn || '';
         await prisma.storyPart.create({
             data: {
-                title,
-                content,
+                title: baseTitle,
+                content: baseContent,
                 titleNl: titleNl || null,
                 contentNl: contentNl || null,
                 titleFr: titleFr || null,
@@ -77,11 +79,13 @@ router.get('/stories/:id/edit', async (req, res) => {
 router.put('/stories/:id', async (req, res) => {
     try {
         const { title, content, titleNl, contentNl, titleFr, contentFr, titleEn, contentEn, orderIndex, qrKey, isActive, lat, lon } = req.body;
+        const baseTitle = (title && title.trim()) || titleNl || titleFr || titleEn || 'Untitled';
+        const baseContent = (content && content.trim()) || contentNl || contentFr || contentEn || '';
         await prisma.storyPart.update({
             where: { id: parseInt(req.params.id) },
             data: {
-                title,
-                content,
+                title: baseTitle,
+                content: baseContent,
                 titleNl: titleNl || null,
                 contentNl: contentNl || null,
                 titleFr: titleFr || null,
