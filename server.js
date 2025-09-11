@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const fileUpload = require('express-fileupload');
@@ -12,6 +13,43 @@ const storyRoutes = require('./routes/stories');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Very light admin protection via HTTP Basic Auth
+function basicAuth(req, res, next) {
+    const adminUser = process.env.ADMIN_USER || 'admin';
+    const adminPass = process.env.ADMIN_PASS || '';
+
+    if (!adminPass) {
+        console.warn('[WARN] ADMIN_PASS not set. Admin protection is effectively disabled.');
+        return next();
+    }
+
+    const authHeader = req.headers['authorization'] || '';
+    const [scheme, encoded] = authHeader.split(' ');
+    if (scheme !== 'Basic' || !encoded) {
+        res.setHeader('WWW-Authenticate', 'Basic realm="Admin Area"');
+        return res.status(401).send('Authentication required');
+    }
+
+    let decoded = '';
+    try {
+        decoded = Buffer.from(encoded, 'base64').toString('utf8');
+    } catch (e) {
+        res.setHeader('WWW-Authenticate', 'Basic realm="Admin Area"');
+        return res.status(401).send('Invalid authentication header');
+    }
+
+    const sepIndex = decoded.indexOf(':');
+    const user = sepIndex >= 0 ? decoded.slice(0, sepIndex) : '';
+    const pass = sepIndex >= 0 ? decoded.slice(sepIndex + 1) : '';
+
+    if (user === adminUser && pass === adminPass) {
+        return next();
+    }
+
+    res.setHeader('WWW-Authenticate', 'Basic realm="Admin Area"');
+    return res.status(401).send('Invalid credentials');
+}
 
 // Set view engine
 app.use(expressLayouts);
@@ -31,8 +69,8 @@ app.use(fileUpload({
 
 // Routes
 app.use('/', indexRoutes);
-app.use('/admin', adminRoutes);
-app.use('/api', apiRoutes);
+app.use('/admin', basicAuth, adminRoutes);
+app.use('/api', basicAuth, apiRoutes);
 app.use('/stories', storyRoutes);
 
 // Error handler
