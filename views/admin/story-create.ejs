@@ -44,6 +44,10 @@
             <input type="number" step="any" class="mt-1 p-2 border border-gray-300 text-gray-700 rounded w-full" id="lon" name="lon">
           </div>
         </div>
+        <div class="mb-4">
+          <div id="map" style="height: 400px; width: 100%;"></div>
+          <p class="text-sm text-white">Click on the map to set coordinates</p>
+        </div>
       </div>
     </div>
 
@@ -53,3 +57,36 @@
     </div>
   </form>
 
+  <%- contentFor('extraScripts') %>
+    <script>
+      const map = L.map('map').setView([51.130, 2.750], 15);
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(map);
+
+      let marker;
+
+      // Pre-place marker if fields already have values (e.g., browser auto-fill)
+      (function initFromFields() {
+        const latVal = parseFloat(document.getElementById('lat').value);
+        const lonVal = parseFloat(document.getElementById('lon').value);
+        if (!isNaN(latVal) && !isNaN(lonVal)) {
+          const latlng = L.latLng(latVal, lonVal);
+          marker = L.marker(latlng).addTo(map);
+          map.setView(latlng, 16);
+        }
+      })();
+
+      map.on('click', function (e) {
+        const lat = e.latlng.lat;
+        const lng = e.latlng.lng;
+        document.getElementById('lat').value = lat;
+        document.getElementById('lon').value = lng;
+        if (marker) {
+          marker.setLatLng(e.latlng);
+        } else {
+          marker = L.marker(e.latlng).addTo(map);
+        }
+      });
+    </script>
