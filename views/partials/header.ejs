@@ -43,4 +43,18 @@
       document.getElementById('mobile-menu').classList.toggle('hidden');
     });
   </script>
+  <div class="bg-halloween-black border-t border-halloween-purple">
+    <div class="container mx-auto px-4 py-2 flex items-center justify-end space-x-2 text-white">
+      <span class="text-sm">Language:</span>
+      <button class="px-2 py-1 rounded text-sm <%= (lang === 'nl') ? 'bg-halloween-orange' : 'bg-gray-700' %>" onclick="setLang('nl')">NL</button>
+      <button class="px-2 py-1 rounded text-sm <%= (lang === 'fr') ? 'bg-halloween-orange' : 'bg-gray-700' %>" onclick="setLang('fr')">FR</button>
+      <button class="px-2 py-1 rounded text-sm <%= (lang === 'en') ? 'bg-halloween-orange' : 'bg-gray-700' %>" onclick="setLang('en')">EN</button>
+    </div>
+  </div>
+  <script>
+    function setLang(code) {
+      document.cookie = 'lang=' + code + '; path=/; max-age=' + (60*60*24*365).toString();
+      window.location.reload();
+    }
+  </script>
 </header>

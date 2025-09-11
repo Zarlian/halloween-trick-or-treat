@@ -19,7 +19,8 @@
         "express-fileupload": "^1.4.3",
         "leaflet-providers": "^2.0.0",
         "method-override": "^3.0.0",
-        "uuid": "^9.0.1"
+        "uuid": "^9.0.1",
+        "cookie-parser": "^1.4.6"
     },
     "devDependencies": {
         "nodemon": "^3.0.3",

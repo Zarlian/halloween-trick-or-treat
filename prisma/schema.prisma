@@ -30,6 +30,12 @@ model StoryPart {
   id         Int     @id @default(autoincrement())
   title      String
   content    String
+  titleNl    String?  @map("title_nl")
+  contentNl  String?  @map("content_nl")
+  titleFr    String?  @map("title_fr")
+  contentFr  String?  @map("content_fr")
+  titleEn    String?  @map("title_en")
+  contentEn  String?  @map("content_en")
   orderIndex Int?    @map("order_index")
   qrKey      String  @unique @map("qr_key")
   isActive   Boolean @default(true) @map("is_active")

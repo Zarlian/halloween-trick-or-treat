@@ -11,8 +11,14 @@ router.get('/', async (req, res) => {
       orderBy: { orderIndex: 'asc' }
     });
 
-    // Do not send content; client checks unlock to fetch content by id
-    res.render('stories/index', { parts });
+    const lang = (req.cookies?.lang || 'nl');
+    const mapped = parts.map(p => ({
+      id: p.id,
+      orderIndex: p.orderIndex,
+      title: (lang === 'fr' && p.titleFr) ? p.titleFr : (lang === 'en' && p.titleEn) ? p.titleEn : (p.titleNl || p.title)
+    }));
+
+    res.render('stories/index', { parts: mapped });
   } catch (err) {
     console.error('Error listing story parts:', err);
     res.status(500).render('error', { error: err });
@@ -27,7 +33,13 @@ router.get('/part/:id', async (req, res) => {
     if (!part || !part.isActive) {
       return res.status(404).render('error', { error: new Error('Story part not found') });
     }
-    res.render('stories/part', { part });
+    const lang = (req.cookies?.lang || 'nl');
+    const viewModel = {
+      id: part.id,
+      title: (lang === 'fr' && part.titleFr) ? part.titleFr : (lang === 'en' && part.titleEn) ? part.titleEn : (part.titleNl || part.title),
+      content: (lang === 'fr' && part.contentFr) ? part.contentFr : (lang === 'en' && part.contentEn) ? part.contentEn : (part.contentNl || part.content)
+    };
+    res.render('stories/part', { part: viewModel });
   } catch (err) {
     console.error('Error fetching story part:', err);
     res.status(500).render('error', { error: err });

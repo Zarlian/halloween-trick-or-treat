@@ -36,11 +36,17 @@ router.get('/stories/create', (req, res) => {
 // Story parts - create
 router.post('/stories', async (req, res) => {
     try {
-        const { title, content, orderIndex, qrKey, isActive, lat, lon } = req.body;
+        const { title, content, titleNl, contentNl, titleFr, contentFr, titleEn, contentEn, orderIndex, qrKey, isActive, lat, lon } = req.body;
         await prisma.storyPart.create({
             data: {
                 title,
                 content,
+                titleNl: titleNl || null,
+                contentNl: contentNl || null,
+                titleFr: titleFr || null,
+                contentFr: contentFr || null,
+                titleEn: titleEn || null,
+                contentEn: contentEn || null,
                 orderIndex: orderIndex ? parseInt(orderIndex) : null,
                 qrKey,
                 isActive: Boolean(isActive),
@@ -70,12 +76,18 @@ router.get('/stories/:id/edit', async (req, res) => {
 // Story parts - update
 router.put('/stories/:id', async (req, res) => {
     try {
-        const { title, content, orderIndex, qrKey, isActive, lat, lon } = req.body;
+        const { title, content, titleNl, contentNl, titleFr, contentFr, titleEn, contentEn, orderIndex, qrKey, isActive, lat, lon } = req.body;
         await prisma.storyPart.update({
             where: { id: parseInt(req.params.id) },
             data: {
                 title,
                 content,
+                titleNl: titleNl || null,
+                contentNl: contentNl || null,
+                titleFr: titleFr || null,
+                contentFr: contentFr || null,
+                titleEn: titleEn || null,
+                contentEn: contentEn || null,
                 orderIndex: orderIndex ? parseInt(orderIndex) : null,
                 qrKey,
                 isActive: Boolean(isActive),

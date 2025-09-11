@@ -2,9 +2,11 @@
 
   <div class="w-full">
     <div class="px-4 md:px-6 lg:px-8">
-      <h1 class="text-2xl md:text-3xl font-bold mb-4">Story</h1>
+      <h1 class="text-2xl md:text-3xl font-bold mb-4"><%= (lang === 'fr') ? 'Histoire' : (lang === 'en') ? 'Story' : 'Verhaal' %></h1>
 
-      <p class="mb-4 text-white">Scan QR codes along the route to unlock story parts.</p>
+      <p class="mb-4 text-white">
+        <%= (lang === 'fr') ? 'Scannez les QR codes le long du parcours pour débloquer les parties de l\'histoire.' : (lang === 'en') ? 'Scan QR codes along the route to unlock story parts.' : 'Scan QR-codes langs de route om delen van het verhaal te ontgrendelen.' %>
+      </p>
 
       <ul class="space-y-3">
         <% parts.forEach(function(part){ %>
@@ -15,7 +17,7 @@
             </div>
             <div>
               <a class="bg-halloween-orange text-white px-3 py-1 rounded hover:opacity-90"
-                 href="/stories/part/<%= part.id %>">Open</a>
+                 href="/stories/part/<%= part.id %>"><%= (lang === 'fr') ? 'Ouvrir' : (lang === 'en') ? 'Open' : 'Openen' %></a>
             </div>
           </li>
         <% }) %>

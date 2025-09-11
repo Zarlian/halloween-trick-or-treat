@@ -27,7 +27,13 @@ router.get('/', async (req, res) => {
             route = await getWalkingRoute(coordinates);
         }
 
-        const storyPins = storyParts.map(p => ({ id: p.id, title: p.title, lat: p.lat, lon: p.lon }));
+        const lang = (req.cookies?.lang || 'nl');
+        const storyPins = storyParts.map(p => ({
+            id: p.id,
+            title: (lang === 'fr' && p.titleFr) ? p.titleFr : (lang === 'en' && p.titleEn) ? p.titleEn : (p.titleNl || p.title),
+            lat: p.lat,
+            lon: p.lon
+        }));
 
         res.render('index', {
             locations: JSON.stringify(visibleLocations),

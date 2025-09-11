@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const path = require('path');
+const cookieParser = require('cookie-parser');
 const fileUpload = require('express-fileupload');
 const methodOverride = require('method-override');
 const expressLayouts = require('express-ejs-layouts');
@@ -61,6 +62,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(cookieParser());
 app.use(methodOverride('_method'));
 app.use(fileUpload({
     limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
@@ -68,6 +70,15 @@ app.use(fileUpload({
 }));
 
 // Routes
+// Language selection (cookie-based, default NL)
+app.use((req, res, next) => {
+    const supported = ['nl', 'fr', 'en'];
+    let lang = req.cookies.lang;
+    if (!supported.includes(lang)) lang = 'nl';
+    res.locals.lang = lang;
+    next();
+});
+
 app.use('/', indexRoutes);
 app.use('/admin', basicAuth, adminRoutes);
 app.use('/api', basicAuth, apiRoutes);
