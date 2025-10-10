@@ -1,5 +1,5 @@
 // Initialize map with a darker tile layer for Halloween feel
-const map = L.map('map').setView([51.130, 2.750], 16);
+const map = L.map('map').setView([51.130, 2.750], 20);
 
 // Use a darker map theme for Halloween
 L.tileLayer('https://tile.jawg.io/jawg-matrix/{z}/{x}/{y}{r}.png?access-token=oP3pxevdwf2yN0quujWuEP8Y42aTk8zrcFVjRY9BUDt5YFJkLxV1F6xBZK1WXbRx', {
@@ -15,14 +15,34 @@ const halloweenIcon = L.divIcon({
     popupAnchor: [0, -30]
 });
 
+const storyIcon = L.divIcon({
+    className: 'halloween-marker story-marker',
+    html: '<div class="marker-content"><img src="/images/icons/purple_scroll.svg" alt="Scroll icon"></div>',
+    iconSize: [28, 28],
+    iconAnchor: [14, 14],
+    popupAnchor: [0, -14]
+});
+
+
 // Array to store markers
 const markers = [];
 
-// Add markers for each location
-locations.forEach(location => {
-    // Use the Halloween icon for markers
+locations.forEach((location, index) => {
+    // Create a custom icon with the number displayed
+    const numberedIcon = L.divIcon({
+        className: 'halloween-marker',
+        html: `<div class="marker-content ">
+                <div class="marker-number">${index + 1}</div>
+                🏚️
+               </div>`,
+        iconSize: [30, 30],
+        iconAnchor: [15, 30],
+        popupAnchor: [0, -30]
+    });
+
+    // Use the numbered Halloween icon for markers
     const marker = L.marker([location.lat, location.lon], {
-        icon: halloweenIcon
+        icon: numberedIcon
     }).addTo(map);
 
     // Create popup content with location details and Halloween styling
@@ -31,18 +51,15 @@ locations.forEach(location => {
       <h3 class="text-halloween-orange font-['Creepster']">${location.title || 'Spooky House'}</h3>
       <p class="location-address text-white">${location.street} ${location.number}</p>
   `;
-
     if (location.description) {
         popupContent += `<p class="text-white">${location.description}</p>`;
     }
-
     if (location.image) {
         popupContent += `
         <div class="image-container">
           <img src="/uploads/${location.image}" alt="${location.title || 'Location image'}" class="border-2 border-halloween-purple">
         </div>`;
     }
-
     popupContent += '</div>';
     marker.bindPopup(popupContent);
     markers.push(marker);
@@ -50,32 +67,46 @@ locations.forEach(location => {
 
 // Add markers for story pins (no routing)
 if (typeof storyPins !== 'undefined' && Array.isArray(storyPins)) {
-    const storyIcon = L.divIcon({
-        className: 'halloween-marker story-marker',
-        html: '<div class="marker-content">📜</div>',
-        iconSize: [28, 28],
-        iconAnchor: [14, 28],
-        popupAnchor: [0, -28]
-    });
 
-    storyPins.forEach(pin => {
+    storyPins.forEach((pin, index) => {
         if (pin.lat != null && pin.lon != null) {
-            const marker = L.marker([pin.lat, pin.lon], { icon: storyIcon }).addTo(map);
+
+            // Create a numbered story icon
+            const numberedStoryIcon = L.divIcon({
+                className: 'halloween-marker story-marker',
+                html: `<div class="marker-content">
+                        <div class="marker-number story-number">${index + 1}</div>
+                        <img src="/images/icons/purple_scroll.svg" alt="Scroll icon">
+                       </div>`,
+                iconSize: [28, 28],
+                iconAnchor: [14, 14],
+                popupAnchor: [0, -14]
+            });
+
+            const marker = L.marker([pin.lat, pin.lon], { icon: numberedStoryIcon }).addTo(map);
+
             const popupContent = `
             <div class="location-popup">
-              <h3 class="text-halloween-orange font-['Creepster']">${pin.title || 'Story'}</h3>
+              <h3 class="text-halloween-white font-['Creepster']">${pin.title || 'Story'}</h3>
               <p class="text-white"><a href="/stories/part/${pin.id}">Open story</a></p>
             </div>`;
-            marker.bindPopup(popupContent);
+            marker.bindPopup(popupContent, { className: 'story-popup' });
             markers.push(marker);
+
+            // Add circle around story pin (radius in meters)
+            L.circle([pin.lat, pin.lon], {
+                radius: 13,
+                weight: 1,
+                color: '#a906f5',
+                fillColor: '#a906f5',
+                fillOpacity: 0.1
+            }).addTo(map);
         }
     });
 }
 
 // If we have markers, fit the map to show all of them
 if (markers.length > 0) {
-    const bounds = L.featureGroup(markers).getBounds();
-    map.fitBounds(bounds, { padding: [50, 50] });
 
     console.log('Route coordinates:', route); // Debugging line
         L.polyline(route, {
@@ -112,14 +143,6 @@ function startLocationTracking() {
                         })
                     }).addTo(map);
 
-                    // Add accuracy circle
-                    L.circle([lat, lng], {
-                        radius: accuracy,
-                        weight: 1,
-                        color: '#ff6c00',
-                        fillColor: '#ff6c00',
-                        fillOpacity: 0.15
-                    }).addTo(map);
 
                 } else {
                     userMarker.setLatLng([lat, lng]);
@@ -210,7 +233,7 @@ locateControl.onAdd = function (map) {
     div.onclick = function () {
         followingLocation = true;
         if (userMarker) {
-            map.setView(userMarker.getLatLng(), 16);
+            map.setView(userMarker.getLatLng(), 20);
         } else {
             startLocationTracking();
         }
@@ -231,6 +254,11 @@ style.textContent = `
     .halloween-marker {
         filter: drop-shadow(0 0 5px rgba(255, 103, 0, 0.7));
     }
+
+    .story-marker {
+        filter: drop-shadow(0 0 5px rgba(65, 15, 121, 0.7));
+    }
+
     .marker-content {
         font-size: 24px;
         text-align: center;
@@ -243,6 +271,16 @@ style.textContent = `
     .leaflet-popup-tip {
         background-color: #FF6700;
     }
+
+    .story-popup .leaflet-popup-content-wrapper  {
+        background-color: #191919;
+        color: white;
+        border: 2px solid #c300ffff;
+    }
+    .story-popup .leaflet-popup-tip {
+        background-color: #c300ffff;
+    }
+
     .story-marker .marker-content {
         font-size: 22px;
     }
@@ -253,6 +291,28 @@ style.textContent = `
     .image-container img {
         max-width: 100%;
         border-radius: 4px;
+    }
+
+    .marker-number {
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        background-color: #FF6700;
+        color: white;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: bold;
+        border: 2px solid white;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .marker-number.story-number {
+            background-color: #a906f5;
     }
 `;
 document.head.appendChild(style);
