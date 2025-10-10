@@ -39,16 +39,21 @@ router.post('/stories', async (req, res) => {
         const { title, content, titleNl, contentNl, titleFr, contentFr, titleEn, contentEn, orderIndex, qrKey, isActive, lat, lon } = req.body;
         const baseTitle = (title && title.trim()) || titleNl || titleFr || titleEn || 'Untitled';
         const baseContent = (content && content.trim()) || contentNl || contentFr || contentEn || '';
+        const baseAssignment = (assignment && assignment.trim()) || assignmentNl || assignmentFr || assignmentEn || '';
         await prisma.storyPart.create({
             data: {
                 title: baseTitle,
                 content: baseContent,
+                assignment: baseAssignment,
                 titleNl: titleNl || null,
                 contentNl: contentNl || null,
+                assignmentNl: assignmentNl || null,
                 titleFr: titleFr || null,
                 contentFr: contentFr || null,
+                assignmentFr: assignmentFr || null,
                 titleEn: titleEn || null,
                 contentEn: contentEn || null,
+                assignmentEn: assignmentEn || null,
                 orderIndex: orderIndex ? parseInt(orderIndex) : null,
                 qrKey,
                 isActive: Boolean(isActive),
@@ -81,17 +86,22 @@ router.put('/stories/:id', async (req, res) => {
         const { title, content, titleNl, contentNl, titleFr, contentFr, titleEn, contentEn, orderIndex, qrKey, isActive, lat, lon } = req.body;
         const baseTitle = (title && title.trim()) || titleNl || titleFr || titleEn || 'Untitled';
         const baseContent = (content && content.trim()) || contentNl || contentFr || contentEn || '';
+        const baseAssignment = (assignment && assignment.trim()) || assignmentNl || assignmentFr || assignmentEn || '';
         await prisma.storyPart.update({
             where: { id: parseInt(req.params.id) },
             data: {
                 title: baseTitle,
                 content: baseContent,
+                assignment: baseAssignment,
                 titleNl: titleNl || null,
                 contentNl: contentNl || null,
+                assignmentNl: assignmentNl || null,
                 titleFr: titleFr || null,
                 contentFr: contentFr || null,
+                assignmentFr: assignmentFr || null,
                 titleEn: titleEn || null,
                 contentEn: contentEn || null,
+                assignmentEn: assignmentEn || null,
                 orderIndex: orderIndex ? parseInt(orderIndex) : null,
                 qrKey,
                 isActive: Boolean(isActive),

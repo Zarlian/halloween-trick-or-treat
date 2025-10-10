@@ -32,10 +32,13 @@ model StoryPart {
   content    String
   titleNl    String?  @map("title_nl")
   contentNl  String?  @map("content_nl")
+  assignmentNl String? @map("assignment_nl")
   titleFr    String?  @map("title_fr")
   contentFr  String?  @map("content_fr")
+  assignmentFr String? @map("assignment_Fr")
   titleEn    String?  @map("title_en")
   contentEn  String?  @map("content_en")
+  assignmentEn String? @map("assignment_en")
   orderIndex Int?    @map("order_index")
   qrKey      String  @unique @map("qr_key")
   isActive   Boolean @default(true) @map("is_active")

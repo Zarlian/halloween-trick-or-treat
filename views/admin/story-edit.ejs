@@ -39,6 +39,11 @@
           <textarea class="mt-1 p-2 border border-gray-300 rounded text-gray-700 w-full" id="contentNl" name="contentNl" rows="6"><%= part.contentNl || '' %></textarea>
         </div>
         <div class="mb-4">
+          <label for="assignmentNl" class="block text-sm font-medium text-white">Assignment (NL)</label>
+          <textarea class="mt-1 p-2 border border-gray-300 rounded text-gray-700 w-full" id="assignmentNl" name="assignmentNl"
+            rows="6"><%= part.contentNl || '' %></textarea>
+        </div>
+        <div class="mb-4">
           <label for="titleFr" class="block text-sm font-medium text-white">Title (FR)</label>
           <input type="text" class="mt-1 p-2 border border-gray-300 text-gray-700 rounded w-full" id="titleFr" name="titleFr" value="<%= part.titleFr || '' %>">
         </div>
@@ -47,12 +52,22 @@
           <textarea class="mt-1 p-2 border border-gray-300 rounded text-gray-700 w-full" id="contentFr" name="contentFr" rows="6"><%= part.contentFr || '' %></textarea>
         </div>
         <div class="mb-4">
+          <label for="assignmentFr" class="block text-sm font-medium text-white">Assignment (FR)</label>
+          <textarea class="mt-1 p-2 border border-gray-300 rounded text-gray-700 w-full" id="assignmentFr" name="assignmentFr"
+            rows="6"><%= part.contentFr || '' %></textarea>
+        </div>
+        <div class="mb-4">
           <label for="titleEn" class="block text-sm font-medium text-white">Title (EN)</label>
           <input type="text" class="mt-1 p-2 border border-gray-300 text-gray-700 rounded w-full" id="titleEn" name="titleEn" value="<%= part.titleEn || '' %>">
         </div>
         <div class="mb-4">
           <label for="contentEn" class="block text-sm font-medium text-white">Content (EN)</label>
           <textarea class="mt-1 p-2 border border-gray-300 rounded text-gray-700 w-full" id="contentEn" name="contentEn" rows="6"><%= part.contentEn || '' %></textarea>
+        </div>
+        <div class="mb-4">
+          <label for="assignmentEn" class="block text-sm font-medium text-white">Assignment (EN)</label>
+          <textarea class="mt-1 p-2 border border-gray-300 rounded text-gray-700 w-full" id="assignmentEn" name="assignmentEn"
+            rows="6"><%= part.contentEn || '' %></textarea>
         </div>
         <div class="grid grid-cols-2 gap-4">
           <div class="mb-4">
