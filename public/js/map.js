@@ -23,9 +23,27 @@ const storyIcon = L.divIcon({
     popupAnchor: [0, -14]
 });
 
-
-// Array to store markers
 const markers = [];
+
+const startMarker = L.marker([51.131555245129945, 2.75600749310408], {
+    icon: L.divIcon({
+        className: 'start-marker',
+        html: `<div class="marker-content"><img src="/images/icons/route_start.svg" alt="Start icon"><p class="font-['Creepster']">Start</p></div>`,
+        iconSize: [70, 70],
+        iconAnchor: [35, 70],
+        popupAnchor: [0, -70]
+    })
+}).addTo(map);
+
+const endMarker = L.marker([51.12943916488878, 2.7542615875210785], {
+    icon: L.divIcon({
+        className: 'start-marker',
+        html: `<div class="marker-content"><img src="/images/icons/route_end.svg" alt="End icon"><p class="font-['Creepster']">Einde</p></div>`,
+        iconSize: [70, 70],
+        iconAnchor: [35, 70],
+        popupAnchor: [0, -70]
+    })
+}).addTo(map);
 
 locations.forEach((location, index) => {
     // Create a custom icon with the number displayed
@@ -40,7 +58,6 @@ locations.forEach((location, index) => {
         popupAnchor: [0, -30]
     });
 
-    // Use the numbered Halloween icon for markers
     const marker = L.marker([location.lat, location.lon], {
         icon: numberedIcon
     }).addTo(map);
@@ -53,12 +70,6 @@ locations.forEach((location, index) => {
   `;
     if (location.description) {
         popupContent += `<p class="text-white">${location.description}</p>`;
-    }
-    if (location.image) {
-        popupContent += `
-        <div class="image-container">
-          <img src="/uploads/${location.image}" alt="${location.title || 'Location image'}" class="border-2 border-halloween-purple">
-        </div>`;
     }
     popupContent += '</div>';
     marker.bindPopup(popupContent);
@@ -105,20 +116,16 @@ if (typeof storyPins !== 'undefined' && Array.isArray(storyPins)) {
     });
 }
 
-// If we have markers, fit the map to show all of them
 if (markers.length > 0) {
 
-    console.log('Route coordinates:', route); // Debugging line
-        L.polyline(route, {
-            color: '#FF6700', // Halloween orange
-            weight: 4,
-            opacity: 0.9,
-            smoothFactor: 1,
-        }).addTo(map);
-    // }
+    L.polyline(route, {
+        color: '#FF6700',
+        weight: 4,
+        opacity: 0.9,
+        smoothFactor: 1,
+    }).addTo(map);
 }
 
-// Add GPS functionality
 let userMarker = null;
 let followingLocation = false;
 
@@ -131,9 +138,7 @@ function startLocationTracking() {
                 const accuracy = position.coords.accuracy;
                 console.log('User location:', lat, lng, 'Accuracy:', accuracy);
 
-                // Update user's marker or create a new one
                 if (userMarker === null) {
-                    // Create a pumpkin icon for the user's location marker
                     userMarker = L.marker([lat, lng], {
                         icon: L.divIcon({
                             className: 'user-location-marker',
@@ -160,7 +165,6 @@ function startLocationTracking() {
                     0: "An unknown error occurred."
                 };
 
-                // Create a toast notification instead of an alert
                 createToast(errorMessages[error.code] || errorMessages[0], 'error');
             },
             {
@@ -178,7 +182,6 @@ map.on('dragstart', function () {
     followingLocation = false;
 });
 
-// Create a toast notification function
 function createToast(message, type = 'info') {
     const toast = document.createElement('div');
     toast.className = `toast toast-${type}`;
@@ -245,10 +248,8 @@ locateControl.onAdd = function (map) {
 
 locateControl.addTo(map);
 
-// Start location tracking when the page loads
 startLocationTracking();
 
-// Add some CSS to style the Halloween markers and popups
 const style = document.createElement('style');
 style.textContent = `
     .halloween-marker {
@@ -258,6 +259,14 @@ style.textContent = `
     .story-marker {
         filter: drop-shadow(0 0 5px rgba(65, 15, 121, 0.7));
     }
+
+    .start-marker {
+        filter: drop-shadow(0 0 5px rgba(2, 17, 2, 0.7));
+    }
+
+    .start-marker .marker-content p{
+    color: #ff6700;
+}
 
     .marker-content {
         font-size: 24px;

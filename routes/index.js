@@ -23,7 +23,18 @@ router.get('/', async (req, res) => {
         const visibleLocations = locations.filter(l => !l.isHidden);
 
         if (locations.length > 0) {
-            coordinates = locations.map(loc => [loc.lon, loc.lat]);
+
+            const startCoords = [2.75600749310408, 51.131555245129945]; 
+            const endCoords = [2.7542615875210785, 51.12943916488878]; 
+
+            const middleCoords = locations.map(loc => [loc.lon, loc.lat]);
+
+            coordinates = [
+                startCoords, 
+                ...middleCoords,
+                endCoords   
+            ];
+
             route = await getWalkingRoute(coordinates);
         }
 
