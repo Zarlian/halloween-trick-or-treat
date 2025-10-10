@@ -15,7 +15,8 @@ router.get('/', async (req, res) => {
     const mapped = parts.map(p => ({
       id: p.id,
       orderIndex: p.orderIndex,
-      title: (lang === 'fr' && p.titleFr) ? p.titleFr : (lang === 'en' && p.titleEn) ? p.titleEn : (p.titleNl || p.title)
+      title: (lang === 'fr' && p.titleFr) ? p.titleFr : (lang === 'en' && p.titleEn) ? p.titleEn : (p.titleNl || p.title),
+      magicWord: (lang === 'fr' && p.magicWordFr) ? p.magicWordFr : (lang === 'en' && p.magicWordEn) ? p.magicWordEn : (p.magicWordNl || p.magicWord)
     }));
 
     res.render('stories/index', { parts: mapped });
