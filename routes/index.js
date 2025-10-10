@@ -24,7 +24,7 @@ router.get('/', async (req, res) => {
 
         if (locations.length > 0) {
 
-            const startCoords = [2.75600749310408, 51.131555245129945]; 
+            const startCoords = [2.7560652299907944, 51.131839673472165]; 
             const endCoords = [2.7542615875210785, 51.12943916488878]; 
 
             const middleCoords = locations.map(loc => [loc.lon, loc.lat]);
