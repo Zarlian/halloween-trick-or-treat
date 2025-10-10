@@ -36,7 +36,7 @@ router.get('/stories/create', (req, res) => {
 // Story parts - create
 router.post('/stories', async (req, res) => {
     try {
-        const { title, content, titleNl, contentNl, titleFr, contentFr, titleEn, contentEn, orderIndex, qrKey, isActive, lat, lon } = req.body;
+        const { title, content, titleNl, contentNl, titleFr, contentFr, titleEn, contentEn, orderIndex, qrKey, isActive, lat, lon , assignmentEn, assignmentFr, assignmentNl, magicWordEn, magicWordFr, magicWordNl} = req.body;
         const baseTitle = (title && title.trim()) || titleNl || titleFr || titleEn || 'Untitled';
         const baseContent = (content && content.trim()) || contentNl || contentFr || contentEn || '';
         await prisma.storyPart.create({
@@ -84,7 +84,7 @@ router.get('/stories/:id/edit', async (req, res) => {
 // Story parts - update
 router.put('/stories/:id', async (req, res) => {
     try {
-        const { title, content, titleNl, contentNl, titleFr, contentFr, titleEn, contentEn, orderIndex, qrKey, isActive, lat, lon } = req.body;
+        const { title, content, titleNl, contentNl, titleFr, contentFr, titleEn, contentEn, orderIndex, qrKey, isActive, lat, lon, assignmentEn, assignmentFr, assignmentNl, magicWordEn, magicWordFr, magicWordNl } = req.body;
         const baseTitle = (title && title.trim()) || titleNl || titleFr || titleEn || 'Untitled';
         const baseContent = (content && content.trim()) || contentNl || contentFr || contentEn || '';
         await prisma.storyPart.update({

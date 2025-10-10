@@ -1,5 +1,5 @@
 // Initialize map with a darker tile layer for Halloween feel
-const map = L.map('map').setView([51.130, 2.750], 20);
+const map = L.map('map').setView([51.131555245129945, 2.75600749310408], 20);
 
 // Use a darker map theme for Halloween
 L.tileLayer('https://tile.jawg.io/jawg-matrix/{z}/{x}/{y}{r}.png?access-token=oP3pxevdwf2yN0quujWuEP8Y42aTk8zrcFVjRY9BUDt5YFJkLxV1F6xBZK1WXbRx', {
