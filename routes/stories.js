@@ -43,7 +43,6 @@ router.get('/part/:id', async (req, res) => {
       , assignment: (lang === 'fr' && part.assignmentFr) ? part.assignmentFr : (lang === 'en' && part.assignmentEn) ? part.assignmentEn : (part.assignmentNl || part.assignment)
       , magicWord: (lang === 'fr' && part.magicWordFr) ? part.magicWordFr : (lang === 'en' && part.magicWordEn) ? part.magicWordEn : (part.magicWordNl || part.magicWord)
     };
-    console.log(viewModel);
     res.render('stories/part', { part: viewModel });
   } catch (err) {
     console.error('Error fetching story part:', err);

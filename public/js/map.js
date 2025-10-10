@@ -136,7 +136,6 @@ function startLocationTracking() {
                 const lat = position.coords.latitude;
                 const lng = position.coords.longitude;
                 const accuracy = position.coords.accuracy;
-                console.log('User location:', lat, lng, 'Accuracy:', accuracy);
 
                 if (userMarker === null) {
                     userMarker = L.marker([lat, lng], {
