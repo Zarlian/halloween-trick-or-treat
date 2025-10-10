@@ -1,28 +1,28 @@
 <%- contentFor('body') %>
-
   <div class="w-full">
     <div class="px-4 md:px-6 lg:px-8">
       <h1 class="text-2xl md:text-3xl font-bold mb-4"><%= (lang === 'fr') ? 'Histoire' : (lang === 'en') ? 'Story' : 'Verhaal' %></h1>
-
       <p class="mb-4 text-white">
         <%= (lang === 'fr') ? 'Scannez les QR codes le long du parcours pour débloquer les parties de l\'histoire.' : (lang === 'en') ? 'Scan QR codes along the route to unlock story parts.' : 'Scan QR-codes langs de route om delen van het verhaal te ontgrendelen.' %>
       </p>
-
       <ul class="space-y-3">
         <% parts.forEach(function(part){ %>
-          <li class="border border-halloween-purple rounded p-3 flex items-center justify-between">
+          <li class="border border-halloween-purple rounded p-3 flex items-center justify-between" data-part-id="<%= part.id %>">
             <div>
               <p class="font-semibold"><%= part.title %></p>
               <p class="text-sm text-gray-300">Part <%= part.orderIndex || '-' %></p>
             </div>
             <div>
-              <a class="bg-halloween-orange text-white px-3 py-1 rounded hover:opacity-90"
-                 href="/stories/part/<%= part.id %>"><%= (lang === 'fr') ? 'Ouvrir' : (lang === 'en') ? 'Open' : 'Openen' %></a>
+              <a class="story-part-link bg-halloween-purple text-white px-3 py-1 rounded hover:opacity-70 inline-flex items-center gap-2"
+                 href="/stories/part/<%= part.id %>"
+                 data-part-id="<%= part.id %>">
+                 <span class="link-text"><%= (lang === 'fr') ? 'Ouvrir' : (lang === 'en') ? 'Open' : 'Openen' %></span>
+                 <span class="lock-icon hidden">🔒</span>
+              </a>
             </div>
           </li>
         <% }) %>
       </ul>
-
       <div class="mt-6 text-sm text-gray-300">
         <p>Already scanned a code but can't open? Make sure your browser allows localStorage.</p>
       </div>
@@ -31,16 +31,49 @@
 
 <%- contentFor('extraScripts') %>
 <script>
+  // Check unlocked parts and update UI
+  const unlocked = JSON.parse(localStorage.getItem('unlockedStoryParts') || '[]');
+  const lang = '<%= lang %>';
+  
+  // Update all links based on unlock status
+  document.querySelectorAll('.story-part-link').forEach(function(anchor){
+    const id = Number(anchor.getAttribute('data-part-id'));
+    const isUnlocked = unlocked.includes(id);
+    
+    if (!isUnlocked) {
+      // Apply locked styling
+      anchor.classList.remove('bg-halloween-purple', 'hover:opacity-70');
+      anchor.classList.add('bg-gray-600', 'cursor-not-allowed', 'opacity-60');
+      
+      // Update text to show locked
+      const linkText = anchor.querySelector('.link-text');
+      const lockIcon = anchor.querySelector('.lock-icon');
+      
+      if (lang === 'fr') {
+        linkText.textContent = 'Verrouillé';
+      } else if (lang === 'en') {
+        linkText.textContent = 'Locked';
+      } else {
+        linkText.textContent = 'Vergrendeld';
+      }
+      
+      lockIcon.classList.remove('hidden');
+    }
+  });
+  
   // Gatekeeping: If a part isn't unlocked in localStorage, redirect to /stories to encourage scanning
   document.querySelectorAll('a[href^="/stories/part/"]').forEach(function(anchor){
     anchor.addEventListener('click', function(e){
-      const id = this.getAttribute('href').split('/').pop();
-      const unlocked = JSON.parse(localStorage.getItem('unlockedStoryParts') || '[]');
-      if (!unlocked.includes(Number(id))) {
+      const id = Number(this.getAttribute('data-part-id'));
+      if (!unlocked.includes(id)) {
         e.preventDefault();
-        alert('Scan the QR code to unlock this part!');
+        const message = lang === 'fr' 
+          ? 'Scannez le QR code pour débloquer cette partie!'
+          : lang === 'en'
+          ? 'Scan the QR code to unlock this part!'
+          : 'Scan de QR-code om dit deel te ontgrendelen!';
+        alert(message);
       }
     });
   });
 </script>
-
