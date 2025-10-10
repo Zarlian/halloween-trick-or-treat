@@ -39,15 +39,11 @@ router.post('/stories', async (req, res) => {
         const { title, content, titleNl, contentNl, titleFr, contentFr, titleEn, contentEn, orderIndex, qrKey, isActive, lat, lon , assignmentEn, assignmentFr, assignmentNl, magicWordEn, magicWordFr, magicWordNl} = req.body;
         const baseTitle = (title && title.trim()) || titleNl || titleFr || titleEn || 'Untitled';
         const baseContent = (content && content.trim()) || contentNl || contentFr || contentEn || '';
-        const baseAssignment = (assignmentEn && assignmentEn.trim()) || assignmentNl || assignmentFr || '';
-        const baseMagicWord = (magicWordEn && magicWordEn.trim()) || magicWordNl || magicWordFr || '';
 
         await prisma.storyPart.create({
             data: {
                 title: baseTitle,
                 content: baseContent,
-                assignment: baseAssignment,
-                magicWord: baseMagicWord,
                 titleNl: titleNl || null,
                 contentNl: contentNl || null,
                 assignmentNl: assignmentNl || null,
@@ -92,15 +88,11 @@ router.put('/stories/:id', async (req, res) => {
         const { title, content, titleNl, contentNl, titleFr, contentFr, titleEn, contentEn, orderIndex, qrKey, isActive, lat, lon, assignmentEn, assignmentFr, assignmentNl, magicWordEn, magicWordFr, magicWordNl } = req.body;
         const baseTitle = (title && title.trim()) || titleNl || titleFr || titleEn || 'Untitled';
         const baseContent = (content && content.trim()) || contentNl || contentFr || contentEn || '';
-        const baseAssignment = (assignmentEn && assignmentEn.trim()) || assignmentNl || assignmentFr || '';
-        const baseMagicWord = (magicWordEn && magicWordEn.trim()) || magicWordNl || magicWordFr || '';
         await prisma.storyPart.update({
             where: { id: parseInt(req.params.id) },
             data: {
                 title: baseTitle,
                 content: baseContent,
-                assignment: baseAssignment,
-                magicWord: baseMagicWord,
                 titleNl: titleNl || null,
                 contentNl: contentNl || null,
                 assignmentNl: assignmentNl || null,
