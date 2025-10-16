@@ -6,6 +6,8 @@ L.tileLayer('https://tile.jawg.io/jawg-matrix/{z}/{x}/{y}{r}.png?access-token=oP
     attribution: '<a href="https://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank">&copy; <b>Jawg</b>Maps</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
 
+const unlockedParts = JSON.parse(localStorage.getItem('unlockedStoryParts') || '[]');
+
 // Create custom Halloween icon for markers
 const halloweenIcon = L.divIcon({
     className: 'halloween-marker',
@@ -96,11 +98,28 @@ if (typeof storyPins !== 'undefined' && Array.isArray(storyPins)) {
 
             const marker = L.marker([pin.lat, pin.lon], { icon: numberedStoryIcon }).addTo(map);
 
-            const popupContent = `
+            // const popupContent = `
+            // <div class="location-popup">
+            //   <h3 class="text-halloween-white font-['Creepster']">${pin.title || 'Story'}</h3>
+            //   <p class="text-white"><a href="/stories/part/${pin.id}">Open story</a></p>
+            // </div>`;
+            // marker.bindPopup(popupContent, { className: 'story-popup' });
+            // markers.push(marker);
+
+            // Check if this story part is unlocked
+            const isUnlocked = unlockedParts.includes(pin.id);
+
+            let popupContent = `
             <div class="location-popup">
-              <h3 class="text-halloween-white font-['Creepster']">${pin.title || 'Story'}</h3>
-              <p class="text-white"><a href="/stories/part/${pin.id}">Open story</a></p>
-            </div>`;
+              <h3 class="text-halloween-white font-['Creepster']">${pin.title || 'Story'}</h3>`;
+
+            // Only add the link if the story is unlocked
+            if (isUnlocked) {
+                popupContent += `<p class="text-white"><a href="/stories/part/${pin.id}">Open story</a></p>`;
+            }
+
+            popupContent += `</div>`;
+
             marker.bindPopup(popupContent, { className: 'story-popup' });
             markers.push(marker);
 
