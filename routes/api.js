@@ -3,7 +3,6 @@ const { PrismaClient } = require('@prisma/client');
 const router = express.Router();
 const prisma = new PrismaClient();
 
-// Get all locations
 router.get('/locations', async (req, res) => {
     try {
         const locations = await prisma.location.findMany({
@@ -19,17 +18,14 @@ router.get('/locations', async (req, res) => {
     }
 });
 
-// Update location order
 router.post('/locations/reorder', async (req, res) => {
     try {
         const { locationOrders } = req.body;
 
-        // Validate input
         if (!Array.isArray(locationOrders)) {
             return res.status(400).json({ error: 'Invalid input format' });
         }
 
-        // Create a transaction to update all locations at once
         const updates = locationOrders.map(item =>
             prisma.location.update({
                 where: { id: parseInt(item.id) },

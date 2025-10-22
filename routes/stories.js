@@ -3,7 +3,6 @@ const { PrismaClient } = require('@prisma/client');
 const router = express.Router();
 const prisma = new PrismaClient();
 
-// List visible story parts (titles only)
 router.get('/', async (req, res) => {
   try {
     const parts = await prisma.storyPart.findMany({
@@ -26,7 +25,6 @@ router.get('/', async (req, res) => {
   }
 });
 
-// View story content (server enforces nothing; client controls unlock)
 router.get('/part/:id', async (req, res) => {
   try {
     const id = parseInt(req.params.id);
@@ -50,7 +48,6 @@ router.get('/part/:id', async (req, res) => {
   }
 });
 
-// Unlock via QR key (QR points to /stories/unlock?code=XYZ)
 router.get('/unlock', async (req, res) => {
   try {
     const code = String(req.query.code || '').trim();
@@ -61,7 +58,6 @@ router.get('/unlock', async (req, res) => {
     if (!part || !part.isActive) {
       return res.status(404).render('error', { error: new Error('Invalid or inactive code') });
     }
-    // Render page that writes localStorage and redirects
     res.render('stories/unlock', { part });
   } catch (err) {
     console.error('Error unlocking story part:', err);

@@ -74,7 +74,6 @@
 
   <%- contentFor('extraScripts') %>
     <script>
-      // Initialize map
       const map = L.map('map').setView([51.130, 2.750], 15);
 
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -83,16 +82,13 @@
 
       let marker;
 
-      // Handle map click to set coordinates
       map.on('click', function (e) {
         const lat = e.latlng.lat;
         const lng = e.latlng.lng;
 
-        // Update form fields
         document.getElementById('lat').value = lat;
         document.getElementById('lon').value = lng;
 
-        // Update or create marker
         if (marker) {
           marker.setLatLng(e.latlng);
         } else {

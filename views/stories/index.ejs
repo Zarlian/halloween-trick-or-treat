@@ -49,33 +49,27 @@
 
 <%- contentFor('extraScripts') %>
   <script>
-    // Check unlocked parts and update UI
     const unlocked = JSON.parse(localStorage.getItem('unlockedStoryParts') || '[]');
     const lang = '<%= lang %>';
 
-    // Update all links and magic words based on unlock status
     document.querySelectorAll('.story-part-link').forEach(function (anchor) {
       const id = Number(anchor.getAttribute('data-part-id'));
       const isUnlocked = unlocked.includes(id);
-      const magicWord = anchor.getAttribute('data-magic-word'); // Get the magic word from the link element
+      const magicWord = anchor.getAttribute('data-magic-word'); 
 
       if (isUnlocked) {
-        // Find the magic word container for this part
         const magicWordContainer = document.querySelector(`.magic-word-container[data-part-id="${id}"]`);
         if (magicWordContainer) {
-          // Update the displayed value to the actual magic word
           const magicWordValueSpan = magicWordContainer.querySelector('.magic-word-value');
           if (magicWordValueSpan) {
             magicWordValueSpan.textContent = magicWord;
-            magicWordValueSpan.classList.add('text-green-400'); // Optional: make it stand out
+            magicWordValueSpan.classList.add('text-green-400');
           }
         }
       } else {
-        // Apply locked styling to the link
         anchor.classList.remove('bg-halloween-purple', 'hover:opacity-70');
         anchor.classList.add('bg-gray-600', 'cursor-not-allowed', 'opacity-60');
 
-        // Update link text to show locked
         const linkText = anchor.querySelector('.link-text');
         const lockIcon = anchor.querySelector('.lock-icon');
 
@@ -91,7 +85,6 @@
       }
     });
 
-    // Gatekeeping: If a part isn't unlocked in localStorage, redirect to /stories to encourage scanning
     document.querySelectorAll('a[href^="/stories/part/"]').forEach(function (anchor) {
       anchor.addEventListener('click', function (e) {
         const id = Number(this.getAttribute('data-part-id'));

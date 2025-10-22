@@ -1,9 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // Enable drag and drop reordering of locations
     const locationsTable = document.getElementById('locations-table-body');
 
     if (locationsTable) {
-        // Function to save new order
         const saveNewOrder = async () => {
             const rows = locationsTable.querySelectorAll('tr');
             const locationOrders = [];
@@ -26,7 +24,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
 
                 if (response.ok) {
-                    // Refresh the page to show updated order
                     window.location.reload();
                 } else {
                     alert('Failed to save new order. Please try again.');
@@ -37,12 +34,8 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         };
 
-        // Add drag and drop functionality
-        // Note: in a production app, you would want to use a library like SortableJS
-        // This is a simplified example for demonstration
         let draggedItem = null;
 
-        // Add event listeners for drag and drop
         const rows = locationsTable.querySelectorAll('tr');
         rows.forEach(row => {
             row.setAttribute('draggable', 'true');
@@ -58,7 +51,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.classList.remove('dragging');
                 draggedItem = null;
 
-                // Save new order after drag ends
                 saveNewOrder();
             });
 

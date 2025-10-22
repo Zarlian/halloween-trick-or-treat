@@ -84,26 +84,21 @@
 
   <%- contentFor('extraScripts') %>
     <script>
-      // Initialize map
       const map = L.map('map').setView([<%= location.lat %>, <%= location.lon %>], 15);
 
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       }).addTo(map);
 
-      // Add marker for current location
       let marker = L.marker([<%= location.lat %>, <%= location.lon %>]).addTo(map);
 
-      // Handle map click to update coordinates
       map.on('click', function (e) {
         const lat = e.latlng.lat;
         const lng = e.latlng.lng;
 
-        // Update form fields
         document.getElementById('lat').value = lat;
         document.getElementById('lon').value = lng;
 
-        // Update marker position
         marker.setLatLng(e.latlng);
       });
     </script>

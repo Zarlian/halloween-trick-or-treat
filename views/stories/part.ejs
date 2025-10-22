@@ -47,14 +47,11 @@
         window.location.replace('/stories');
       }
 
-      // JavaScript for revealing the magic word
       const revealButton = document.getElementById('reveal-button');
       const magicWordDisplay = document.getElementById('magic-word-display');
 
       revealButton.addEventListener('click', () => {
-        // Hide the button using the 'hidden' class
         revealButton.classList.add('hidden');
-        // Show the magic word by removing the 'hidden' class
         magicWordDisplay.classList.remove('hidden');
       });
 

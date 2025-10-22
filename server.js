@@ -6,7 +6,6 @@ const fileUpload = require('express-fileupload');
 const methodOverride = require('method-override');
 const expressLayouts = require('express-ejs-layouts');
 
-// Import routes
 const indexRoutes = require('./routes/index');
 const adminRoutes = require('./routes/admin');
 const apiRoutes = require('./routes/api');
@@ -15,7 +14,6 @@ const storyRoutes = require('./routes/stories');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Very light admin protection via HTTP Basic Auth
 function basicAuth(req, res, next) {
     const adminUser = process.env.ADMIN_USER || 'admin';
     const adminPass = process.env.ADMIN_PASS || '';
@@ -69,7 +67,6 @@ app.use(fileUpload({
     createParentPath: true
 }));
 
-// Routes
 // Language selection (cookie-based, default NL)
 app.use((req, res, next) => {
     const supported = ['nl', 'fr', 'en'];
@@ -79,6 +76,8 @@ app.use((req, res, next) => {
     next();
 });
 
+
+// Routes
 app.use('/', indexRoutes);
 app.use('/admin', basicAuth, adminRoutes);
 app.use('/api', basicAuth, apiRoutes);
